@@ -5,10 +5,27 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { DomainModule } from './domain/domain.module';
 import { InfrastructureModule } from './infrastructure/infrastructure.module';
 import { AppHttpModule } from './app/appHttpModule';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { DocumentEntity } from './infrastructure/storage/entities/document.entity';
 
 @Module({
-  imports: [CqrsModule.forRoot(), AppHttpModule, DomainModule, InfrastructureModule],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'password',
+      database: 'deel',
+      entities: [DocumentEntity],
+      synchronize: true,
+    }),
+    CqrsModule.forRoot(),
+    AppHttpModule,
+    DomainModule,
+    InfrastructureModule,
+  ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService], 
 })
 export class AppModule {}

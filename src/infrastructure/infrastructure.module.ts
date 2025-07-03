@@ -16,6 +16,6 @@ import { RedisQueueAdapter } from './queue/redis-queue.adapter';
       useClass: RedisQueueAdapter,
     },
   ],
-  exports: [PostgresStorageAdapter, RedisQueueAdapter],
+  exports: ['StoragePort', 'QueuePort'],
 })
 export class InfrastructureModule {}

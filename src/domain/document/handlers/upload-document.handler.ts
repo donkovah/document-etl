@@ -1,6 +1,6 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UploadDocumentCommand } from '../upload-document.command';
-import { DocumentService } from '../../services/document.service';
+import { UploadDocumentCommand } from '../commands/upload-document.command';
+import { DocumentService } from '../services/document.service';
 
 @CommandHandler(UploadDocumentCommand)
 export class UploadDocumentHandler implements ICommandHandler<UploadDocumentCommand> {
