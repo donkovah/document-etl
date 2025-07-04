@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DocumentEntity } from './entities/document.entity';
-import { DocumentRepository } from 'src/domain/document/interfaces/document-repository.interface';
-import { Document } from 'src/domain/document/models/document.model';
+import { DocumentRepository } from '../../domain/document/interfaces/document-repository.interface';
+import { Document } from '../../domain/document/models/document.model';
 
 @Injectable()
 export class DocumentRepositoryAdapter implements DocumentRepository {
