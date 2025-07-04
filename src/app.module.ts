@@ -16,7 +16,7 @@ import { DocumentEntity } from './infrastructure/storage/entities/document.entit
       port: 5432,
       username: 'postgres',
       password: 'password',
-      database: 'deel',
+      database: 'document_management',
       entities: [DocumentEntity],
       synchronize: true,
     }),

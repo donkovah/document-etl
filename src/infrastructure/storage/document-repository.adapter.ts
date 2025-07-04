@@ -20,6 +20,9 @@ export class PostgresStorageAdapter implements DocumentRepository {
       metadata: document.metadata || {},
     });
 
+    console.log('Saving document:', entity);
+
+
     const savedEntity = await this.documentRepo.save(entity);
     return Document.fromPersistence(
       savedEntity.id,

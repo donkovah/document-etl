@@ -25,6 +25,7 @@ export class DocumentController {
     const result = await this.commandBus.execute<UploadDocumentCommand>(
       new UploadDocumentCommand(file, body.filename),
     );
+    console.log('Document uploaded:', result);
 
     return {
       id: result.id,
