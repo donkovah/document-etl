@@ -3,12 +3,14 @@ import { DocumentRepository } from '../interfaces/document-repository.interface'
 import { QueueInterface } from '../interfaces/queue.interface';
 import { Document, DocumentStatus } from '../models/document.model';
 import { StorageService } from './storage.service';
+import { DocumentProcessor } from '../interfaces/document-processor.interface';
 
 @Injectable()
 export class DocumentService {
   constructor(
     @Inject('StoragePort') private readonly documentRepository: DocumentRepository,
     @Inject('QueuePort') private readonly queueBroker: QueueInterface,
+    @Inject('OCRPort') private readonly documentProcessor: DocumentProcessor,
     private readonly storageService: StorageService,
   ) {}
 
@@ -28,7 +30,7 @@ export class DocumentService {
         await this.queueBroker.enqueueDocument(savedDocument.id);
     
         console.log('Document upload and enqueue successful');
-        return document;
+        return savedDocument;
     } catch (error) {
         console.error('Error uploading document:', error);
         throw new Error('Document upload failed');
@@ -37,21 +39,23 @@ export class DocumentService {
 
   async processDocument(documentId: string): Promise<void> {
     const document = await this.documentRepository.findById(documentId);
-    if (!document) {
+    if (!document || !document.id) {
       throw new Error(`Document with id ${documentId} not found`);
     }
 
     try {
       // Mark as processing
       document.status = DocumentStatus.PROCESSING;
-      const updatedDocument = await this.documentRepository.save(document);
+      const updatedDocument = await this.documentRepository.updateStatus(document.id, DocumentStatus.PROCESSING);
 
       // Process the document (OCR, validation, etc.)
-      // This would involve other services/ports
+      const file = this.storageService.download(document.fileUrl);
+      await this.documentProcessor.process(file.buffer);
       
       // Mark as validated
-      updatedDocument.status = DocumentStatus.VALIDATED;
-      await this.documentRepository.save(updatedDocument);
+      document.status = DocumentStatus.VALIDATED;
+      await this.documentRepository.updateStatus(document.id, DocumentStatus.VALIDATED);
+      console.log(`Document ${document.id} processed and validated successfully`);
       
     } catch (error) {
       document.status = DocumentStatus.FAILED;
