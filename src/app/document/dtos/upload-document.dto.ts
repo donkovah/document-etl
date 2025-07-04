@@ -3,5 +3,8 @@ import { IsString, IsNotEmpty } from 'class-validator';
 export class UploadDocumentDto {
   @IsString()
   @IsNotEmpty()
-  documentType: string;
+  filename: string;
+
+  @IsNotEmpty()
+  file: Express.Multer.File;
 }

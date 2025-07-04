@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DocumentEntity } from './storage/entities/document.entity';
-import { PostgresStorageAdapter } from './storage/postgres-storage.adapter';
+import { PostgresStorageAdapter } from './storage/document-repository.adapter';
 import { RedisQueueAdapter } from './queue/redis-queue.adapter';
 
 @Module({

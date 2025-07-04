@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { createClient } from 'redis';
-import { QueuePort } from 'src/domain/document/interfaces/queue.interface';
+import { QueueInterface } from 'src/domain/document/interfaces/queue.interface';
 
 @Injectable()
-export class RedisQueueAdapter implements QueuePort {
+export class RedisQueueAdapter implements QueueInterface {
   private readonly redisClient = createClient();
 
   constructor() {

@@ -1,3 +1,3 @@
-export interface QueuePort {
-    enqueueDocument(documentId: string): Promise<void>;
+export interface QueueInterface {
+    enqueueDocument(documentId: string, options: { documentId: string }): Promise<void>;
   }

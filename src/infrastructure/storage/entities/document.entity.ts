@@ -6,14 +6,21 @@ export class DocumentEntity {
   id: string;
 
   @Column()
-  type: string;
+  filename: string;
 
   @Column()
-  path: string;
+  fileUrl: string;
 
   @Column()
   status: string;
 
-  @Column({ type: 'timestamptz' })
-  uploadedAt: Date;
+  @Column({ type: 'jsonb', nullable: true })
+  metadata: Record<string, any>;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  createdAt: Date;
+
+  @Column({ type: 'timestamptz', nullable: true })
+  updatedAt: Date;
+
 }

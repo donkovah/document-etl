@@ -1,7 +1,9 @@
-export class UploadDocumentCommand {
+import { ICommand } from "@nestjs/cqrs";
+
+export class UploadDocumentCommand implements ICommand {
     constructor(
       public readonly file: Express.Multer.File,
-      public readonly documentType: string,
+      public readonly filename: string,
     ) {}
   }
   
