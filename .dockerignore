@@ -1,0 +1,20 @@
+# Node modules (we install fresh inside container)
+node_modules
+
+# Logs
+logs
+*.log
+*.log.*
+
+.env
+
+dist
+
+# Dockerfile and docker-compose files (optional, if you don't need them copied)
+Dockerfile*
+docker-compose*
+
+# Git files
+.git
+.gitignore
+

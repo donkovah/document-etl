@@ -1,13 +1,18 @@
 import { Injectable, OnModuleDestroy } from '@nestjs/common';
 import { createClient, RedisClientType } from 'redis';
 import { QueueInterface } from 'src/domain/document/interfaces/queue.interface';
+import { config } from '../../config/config';
+
 
 @Injectable()
 export class RedisQueueAdapter implements QueueInterface, OnModuleDestroy {
   private readonly redisClient: RedisClientType;
 
   constructor() {
-    this.redisClient = createClient()
+    this.redisClient = createClient({
+      url: config.REDIS_URL,
+    });
+
     this.redisClient.on('error', (err) => {
         console.error('Redis Client Error', err);
       });

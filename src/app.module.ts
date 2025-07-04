@@ -7,16 +7,14 @@ import { InfrastructureModule } from './infrastructure/infrastructure.module';
 import { AppHttpModule } from './app/appHttpModule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DocumentEntity } from './infrastructure/storage/entities/document.entity';
+import { config } from './config/config';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
+      url: config.POSTGRES_URL || 'postgresql://postgres:password@localhost:5432/document_management',
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'password',
-      database: 'document_management',
+      database: config.POSTGRES_DATABASE || 'document_management',
       entities: [DocumentEntity],
       synchronize: true,
     }),

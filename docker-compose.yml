@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: document_management
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Redis for Queue
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # API Service (handles HTTP requests)
+  api:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./uploads:/usr/src/app/uploads
+
+volumes:
+  postgres_data:
+  redis_data:
