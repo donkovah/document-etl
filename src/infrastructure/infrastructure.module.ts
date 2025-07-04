@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DocumentEntity } from './storage/entities/document.entity';
-import { PostgresStorageAdapter } from './storage/document-repository.adapter';
+import { DocumentRepositoryAdapter } from './storage/document-repository.adapter';
 import { RedisQueueAdapter } from './queue/redis-queue.adapter';
 import { QueueConsumerService } from './queue/queue-consumer.service';
 import { InvoiceProcessorOCR } from './ocrs/invoice-processor.ocr';
@@ -11,7 +11,7 @@ import { InvoiceProcessorOCR } from './ocrs/invoice-processor.ocr';
   providers: [
     {
       provide: 'StoragePort',
-      useClass: PostgresStorageAdapter,
+      useClass: DocumentRepositoryAdapter,
     },
     {
       provide: 'QueuePort',

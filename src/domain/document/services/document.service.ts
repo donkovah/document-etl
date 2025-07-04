@@ -22,8 +22,12 @@ export class DocumentService {
         }
     
         // Add job to Redis queue for async processing
+        // An outbox pattern could be used here to ensure the job is only added 
+        // if the document is saved successfully
+        console.log(`Enqueuing document ${savedDocument.id} for processing`);
         await this.queueBroker.enqueueDocument(savedDocument.id);
     
+        console.log('Document upload and enqueue successful');
         return document;
     } catch (error) {
         console.error('Error uploading document:', error);

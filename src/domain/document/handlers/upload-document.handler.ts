@@ -11,7 +11,15 @@ export class UploadDocumentHandler implements ICommandHandler<UploadDocumentComm
 
   async execute(command: UploadDocumentCommand): Promise<Document> {
     const { file, filename } = command;
-
-    return await this.documentService.uploadDocument(file, filename);
+    
+    try {
+        // Uploading file to storage
+        const document =  await this.documentService.uploadDocument(file, filename)
+        console.log(`Document ${filename} processed successfully`);
+        return document;
+      } catch (error) {
+        console.error(`Failed to upload document ${filename}:`, error);
+        throw error;
+      }
   }
 }

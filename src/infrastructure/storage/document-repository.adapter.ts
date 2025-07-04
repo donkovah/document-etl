@@ -6,7 +6,7 @@ import { DocumentRepository } from 'src/domain/document/interfaces/document-repo
 import { Document } from 'src/domain/document/models/document.model';
 
 @Injectable()
-export class PostgresStorageAdapter implements DocumentRepository {
+export class DocumentRepositoryAdapter implements DocumentRepository {
   constructor(
     @InjectRepository(DocumentEntity)
     private readonly documentRepo: Repository<DocumentEntity>,
@@ -21,7 +21,6 @@ export class PostgresStorageAdapter implements DocumentRepository {
     });
 
     console.log('Saving document:', entity);
-
 
     const savedEntity = await this.documentRepo.save(entity);
     return Document.fromPersistence(
