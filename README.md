@@ -41,8 +41,8 @@ docker-compose up
 ```
 
 ## API Endpoints
-POST /documents/upload - Upload new document
-GET / - Health check
+- POST /documents/upload - Upload new document
+- GET / - Health check
 
 ## Design Decisions
 

@@ -8,9 +8,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CommandBus } from '@nestjs/cqrs';
 import { UploadDocumentDto } from './dtos/upload-document.dto';
-import { UploadDocumentCommand } from 'src/domain/document/commands/upload-document.command';
-import { Document } from 'src/domain/document/models/document.model';
-import { UploadDocumentHandler } from 'src/domain/document/handlers/upload-document.handler';
+import { UploadDocumentCommand } from '../../domain/document/commands/upload-document.command';
 
 @Controller('documents')
 export class DocumentController {
