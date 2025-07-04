@@ -17,12 +17,12 @@ export class DocumentService {
         const fileUrl = this.storageService.upload(file);
         const document =  Document.create(filename, fileUrl);
         const savedDocument = await this.documentRepository.save(document);
-        // if (!savedDocument.id) {
-        //   throw new Error('Document could not be saved');   
-        // }
+        if (!savedDocument.id) {
+          throw new Error('Document could not be saved');   
+        }
     
-        // // Add job to Redis queue for async processing
-        // await this.queueBroker.enqueueDocument(savedDocument.id);
+        // Add job to Redis queue for async processing
+        await this.queueBroker.enqueueDocument(savedDocument.id);
     
         return document;
     } catch (error) {

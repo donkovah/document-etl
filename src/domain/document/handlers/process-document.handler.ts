@@ -1,8 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { UploadDocumentCommand } from '../commands/upload-document.command';
 import { DocumentService } from '../services/document.service';
-import { Document } from '../models/document.model';
-import { StorageService } from '../services/storage.service';
 import { ProcessDocumentCommand } from '../commands/process-document.command';
 
 @CommandHandler(ProcessDocumentCommand)
