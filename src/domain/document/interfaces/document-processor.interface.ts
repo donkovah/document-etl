@@ -1,11 +1,11 @@
 export interface OCRResult {
-    text: string;
     confidence: number;
     language: string;
+    customerName: string;
+    invoiceNumber: string;
+    totalAmount: number;
   }
   
   export interface DocumentProcessor {
     process(buffer: Buffer): Promise<OCRResult>;
-    extractMetadata(ocrResult: OCRResult): Record<string, any>;
-    validateMetadata(metadata: Record<string, any>): boolean;
   }

@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DocumentRepository } from '../interfaces/document-repository.interface';
 import { QueueInterface } from '../interfaces/queue.interface';
-import { Document } from '../models/document.model';
+import { Document, DocumentStatus } from '../models/document.model';
 import { StorageService } from './storage.service';
 
 @Injectable()
@@ -13,18 +13,46 @@ export class DocumentService {
   ) {}
 
   async uploadDocument(file:Express.Multer.File, filename: string): Promise<Document> {
-    const fileUrl = this.storageService.upload(file);
-    const document =  Document.create(filename, fileUrl);
-    const savedDocument = await this.documentRepository.save(document);
-    if (!savedDocument.id) {
-      throw new Error('Document could not be saved');   
+    try {
+        const fileUrl = this.storageService.upload(file);
+        const document =  Document.create(filename, fileUrl);
+        const savedDocument = await this.documentRepository.save(document);
+        if (!savedDocument.id) {
+          throw new Error('Document could not be saved');   
+        }
+    
+        // Add job to Redis queue for async processing
+        await this.queueBroker.enqueueDocument(savedDocument.id);
+    
+        return savedDocument;
+    } catch (error) {
+        console.error('Error uploading document:', error);
+        throw new Error('Document upload failed');
+    }
+  }
+
+  async processDocument(documentId: string): Promise<void> {
+    const document = await this.documentRepository.findById(documentId);
+    if (!document) {
+      throw new Error(`Document with id ${documentId} not found`);
     }
 
-    // Add job to Redis queue for async processing
-    await this.queueBroker.enqueueDocument('process-document', {
-      documentId: savedDocument.id,
-    });
+    try {
+      // Mark as processing
+      document.status = DocumentStatus.PROCESSING;
+      const updatedDocument = await this.documentRepository.save(document);
 
-    return savedDocument;
+      // Process the document (OCR, validation, etc.)
+      // This would involve other services/ports
+      
+      // Mark as validated
+      updatedDocument.status = DocumentStatus.VALIDATED;
+      await this.documentRepository.save(updatedDocument);
+      
+    } catch (error) {
+      document.status = DocumentStatus.FAILED;
+      await this.documentRepository.save(document);
+      throw error;
+    }
   }
 }

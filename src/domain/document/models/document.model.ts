@@ -1,14 +1,19 @@
-export type DocumentStatus = 'uploaded' | 'processing' | 'validated' | 'failed';
+export enum DocumentStatus {
+  UPLOADED = 'uploaded',
+  PROCESSING = 'processing',
+  VALIDATED = 'validated',
+  FAILED = 'failed',
+}
 
 export class Document {
   constructor(
     public readonly id: string | null ,
     public filename: string,
     public fileUrl: string,
-    public status: DocumentStatus = 'uploaded',
+    public status: DocumentStatus = DocumentStatus.UPLOADED,
     public metadata?: Record<string, any>,
-    private readonly _createdAt: Date | null = null,
-    private _updatedAt: Date | null = null,
+    private readonly createdAt: Date | null = null,
+    private readonly updatedAt: Date | null = null,
   ) {}
 
   static create(filename: string, fileUrl: string): Document {

@@ -1,3 +1,6 @@
 export interface QueueInterface {
-    enqueueDocument(documentId: string, options: { documentId: string }): Promise<void>;
-  }
+    enqueueDocument(documentId: string): Promise<void>;
+    dequeueDocument(): Promise<string | null>;
+
+    close(): Promise<void>;
+}
